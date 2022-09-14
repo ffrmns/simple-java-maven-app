@@ -1,9 +1,5 @@
 node {
     checkout scm
-    properties([
-        skipStagesAfterUnstable(),
-    ])
-    checkout skipStagesAfterUnstable
     docker.image('maven:3.8.1-adoptopenjdk-11')
         .inside('-v /root/.m2:/root/.m2') {
             stage('Build') {
@@ -16,8 +12,10 @@ node {
             } finally {
                 junit 'target/surefire-reports/*.xml'
             }
-            stage('Deliver') {
-                sh './jenkins/scripts/deliver.sh'
+            if(currentBuild.result != "UNSTABLE") {
+                stage('Deliver') {
+                    sh './jenkins/scripts/deliver.sh'
+                }
             }
         }
 }
