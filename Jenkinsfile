@@ -1,10 +1,9 @@
 node {
     checkout scm
-    properties(
-        [
-            skipStagesAfterUnstable()
-        ]
-    )
+    properties([
+        skipStagesAfterUnstable(),
+    ])
+    checkout skipStagesAfterUnstable
     docker.image('maven:3.8.1-adoptopenjdk-11')
         .inside('-v /root/.m2:/root/.m2') {
             stage('Build') {
