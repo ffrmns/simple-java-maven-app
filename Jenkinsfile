@@ -5,5 +5,12 @@ node {
             stage('Build') {
                 sh 'mvn -B -DskipTests clean package'
             }
+            try {
+                stage('Test') {
+                    sh 'mvn test'
+                }
+            } finally {
+                junit 'target/surefire-reports/*.xml'
+            }
         }
 }
