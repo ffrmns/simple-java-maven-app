@@ -12,10 +12,12 @@ node {
             } finally {
                 junit 'target/surefire-reports/*.xml'
             }
-            if(currentBuild.result != "UNSTABLE") {
-                stage('Deliver') {
-                    sh './jenkins/scripts/deliver.sh'
-                }
+            stage('Manual Approval') {
+                input(message : "Lanjutkan ke tahap Deploy?")
+            }
+            stage('Deploy') {
+                sh './jenkins/scripts/deliver.sh'
+                sleep 60
             }
         }
 }
